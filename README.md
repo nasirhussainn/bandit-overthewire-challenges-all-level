@@ -103,11 +103,20 @@ Here's a breakdown of the initial levels, complete with commands and strategies:
     * `cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'`: Decrypts the file content using ROT13 substitution.
 * **Strategy:** `tr` is used to translate characters based on the ROT13 cipher.
 
-**Level 12 to 13**
+**Level 12 - 13**
 
-* **Challenge:** Analyzing a hexadecimal dump and decompressing files.
-* **Commands:** (See)
-* **Strategy:** This level requires a combination of `xxd`, `gzip`, `bzip2`, and `tar` commands to analyze and decompress various file formats.
+**Command:** `lv 12`
+
+**Description:**  To get the password for level 13, a series of commands were used to decompress and extract files.
+
+*   First, a temporary directory was created and the 'data.txt' file from the home directory of bandit12 was copied to the /tmp directory. The 'data.txt' was then moved to the temporary directory and renamed to 'comp.txt'. The command 'xxd -r comp.txt > comp' converted the hexadecimal representation in 'comp.txt' to its binary equivalent, creating a file named 'comp'.
+*   The 'comp' file turned out to be a gzip compressed file, which was then renamed to 'comp.gz' and decompressed using 'gzip -d comp.gz'. The resulting 'comp' file was a bzip2 compressed file, renamed to 'comp.bz2' and decompressed using 'bzip2 -d comp.bz2'.
+*   The decompressed 'comp' file was identified as a POSIX tar archive. It was renamed to 'comp.tar' and extracted using 'tar xf comp.tar'. Inside the 'comp.tar' was a file named 'data5.bin', which was also a POSIX tar archive.
+*   After removing unnecessary files, 'data5.bin' was renamed to 'comp.tar' and extracted, revealing 'data6.bin'. 'data6.bin' was a bzip2 compressed file, which was decompressed to get a POSIX tar archive named 'comp.tar'. Extracting 'comp.tar' resulted in a file named 'data8.bin', which was a gzip compressed file.
+*   Finally, 'data8.bin' was decompressed to get a file named 'comp', which contained the password for level 13: **FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn**.
+
+**Output:**  FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn 
+
 
 **Level 13 to 14**
 
