@@ -1,6 +1,4 @@
-# bandit-overthewire-challenges-all-level
-
-# Bandit OverTheWire Challenge: A Comprehensive Guide
+# Bandit OverTheWire Challenge: A Comprehensive Guide by Nasir Hussain
 
 Welcome to the Bandit OverTheWire wargame, a captivating journey through the world of cybersecurity, focusing on practical exploitation techniques in a **Linux** environment. This README aims to be your companion, guiding you through the levels and enhancing your understanding of the commands and concepts involved.
 
@@ -103,19 +101,61 @@ Here's a breakdown of the initial levels, complete with commands and strategies:
     * `cat data.txt | tr 'A-Za-z' 'N-ZA-Mn-za-m'`: Decrypts the file content using ROT13 substitution.
 * **Strategy:** `tr` is used to translate characters based on the ROT13 cipher.
 
-**Level 12 - 13**
+**Level 12 to 13**
 
-**Command:** `lv 12`
+**Output:** FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn
 
-**Description:**  To get the password for level 13, a series of commands were used to decompress and extract files.
+**Command:** 
 
-*   First, a temporary directory was created and the 'data.txt' file from the home directory of bandit12 was copied to the /tmp directory. The 'data.txt' was then moved to the temporary directory and renamed to 'comp.txt'. The command 'xxd -r comp.txt > comp' converted the hexadecimal representation in 'comp.txt' to its binary equivalent, creating a file named 'comp'.
-*   The 'comp' file turned out to be a gzip compressed file, which was then renamed to 'comp.gz' and decompressed using 'gzip -d comp.gz'. The resulting 'comp' file was a bzip2 compressed file, renamed to 'comp.bz2' and decompressed using 'bzip2 -d comp.bz2'.
-*   The decompressed 'comp' file was identified as a POSIX tar archive. It was renamed to 'comp.tar' and extracted using 'tar xf comp.tar'. Inside the 'comp.tar' was a file named 'data5.bin', which was also a POSIX tar archive.
-*   After removing unnecessary files, 'data5.bin' was renamed to 'comp.tar' and extracted, revealing 'data6.bin'. 'data6.bin' was a bzip2 compressed file, which was decompressed to get a POSIX tar archive named 'comp.tar'. Extracting 'comp.tar' resulted in a file named 'data8.bin', which was a gzip compressed file.
-*   Finally, 'data8.bin' was decompressed to get a file named 'comp', which contained the password for level 13: **FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn**.
+```bash
+cd $(mktemp -d) 
+cp /home/bandit12/data.txt /tmp/tmp.PpqdcrHOz2 
+mv data.txt /tmp/tmp.PpqdcrHOz2/comp.txt 
+xxd -r comp.txt > comp 
+file comp 
+mv comp comp.gz 
+gzip -d comp.gz 
+file comp 
+mv comp comp.bz2 
+bzip2 -d comp.bz2 
+file comp 
+mv comp comp.tar 
+tar xf comp.tar 
+ls 
+file data5.bin 
+rm comp.tar 
+rm comp.txt 
+mv data5.bin comp.tar 
+tar xf comp.tar 
+ls 
+file data6* 
+mv data6.bin comp.bz2 
+bzip2 -d comp.bz2 
+file comp 
+mv comp comp.tar 
+tar xf comp.tar 
+ls 
+file *n 
+mv data8.bin comp.gz  
+gzip -d comp.gz 
+file comp 
+cat comp
+```
 
-**Output:**  FO5dwFsc0cbaIiH0h8J2eUks2vdTDwAn 
+**Description:**  To get the password for level 13, this sequence of commands navigates through a series of nested compressed and archived files to ultimately extract the password.
+
+*   `cd $(mktemp -d)` creates a temporary directory and changes the current working directory to it. 
+*   `cp /home/bandit12/data.txt /tmp/tmp.PpqdcrHOz2` copies the file 'data.txt' from the home directory of bandit12 to a temporary directory in `/tmp`. 
+*   `mv data.txt /tmp/tmp.PpqdcrHOz2/comp.txt` moves 'data.txt' to the temporary directory and renames it to 'comp.txt'.
+*   `xxd -r comp.txt > comp` converts the hexadecimal representation in 'comp.txt' to its binary equivalent, creating a file named 'comp'.
+*   The `file` command is used to determine the file type.
+
+The 'comp' file is a gzip compressed file. It is renamed to 'comp.gz' and decompressed using `gzip -d comp.gz`. The resulting 'comp' file is a bzip2 compressed file, renamed to 'comp.bz2' and decompressed using `bzip2 -d comp.bz2`.  This 'comp' file is a POSIX tar archive. It is renamed to 'comp.tar' and extracted using `tar xf comp.tar`. Inside 'comp.tar' is a file named 'data5.bin', which is also a POSIX tar archive.
+
+`rm comp.tar` and `rm comp.txt` remove unnecessary files. 'data5.bin' is renamed to 'comp.tar' and extracted, revealing 'data6.bin'. 'data6.bin' is a bzip2 compressed file, which is decompressed to get a POSIX tar archive named 'comp.tar'. Extracting 'comp.tar' results in a file named 'data8.bin', which is a gzip compressed file.
+
+Finally, 'data8.bin' is decompressed to get a file named 'comp'. The command `cat comp` displays the content of this file, revealing the password. 
+
 
 
 **Level 13 to 14**
